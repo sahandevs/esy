@@ -1,13 +1,6 @@
 type t =
   | Dist(Dist.t)
-  | Link{
-      path: DistPath.t,
-      manifest: option(ManifestSpec.t),
-      kind: linkKind,
-    }
-and linkKind =
-  | LinkRegular
-  | LinkDev;
+  | Link(Link.t);
 
 include S.COMMON with type t := t;
 

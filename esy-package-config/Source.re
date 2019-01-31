@@ -1,16 +1,7 @@
-open Sexplib0.Sexp_conv;
-
 [@deriving (ord, sexp_of)]
 type t =
   | Dist(Dist.t)
-  | Link{
-      path: DistPath.t,
-      manifest: option(ManifestSpec.t),
-      kind: linkKind,
-    }
-and linkKind =
-  | LinkRegular
-  | LinkDev;
+  | Link(Link.t);
 
 let manifest = (src: t) =>
   switch (src) {
@@ -24,8 +15,9 @@ let toDist = (src: t) =>
   | Link({path, manifest, kind: _}) => Dist.LocalPath({path, manifest})
   };
 
-let show' = (~showPath) =>
-  fun
+let show' = (~pretty, source) => {
+  let showPath = pretty ? DistPath.showPretty : DistPath.show;
+  switch (source) {
   | Dist(Github({user, repo, commit, manifest: None})) =>
     Printf.sprintf("github:%s/%s#%s", user, repo, commit)
   | Dist(Github({user, repo, commit, manifest: Some(manifest)})) =>
@@ -56,25 +48,12 @@ let show' = (~showPath) =>
       ManifestSpec.show(manifest),
     )
   | Dist(NoSource) => "no-source:"
-  | Link({path, manifest: None, kind: LinkRegular}) =>
-    Printf.sprintf("link:%s", showPath(path))
-  | Link({path, manifest: Some(manifest), kind: LinkRegular}) =>
-    Printf.sprintf(
-      "link:%s/%s",
-      showPath(path),
-      ManifestSpec.show(manifest),
-    )
-  | Link({path, manifest: None, kind: LinkDev}) =>
-    Printf.sprintf("link-dev:%s", showPath(path))
-  | Link({path, manifest: Some(manifest), kind: LinkDev}) =>
-    Printf.sprintf(
-      "link-dev:%s/%s",
-      showPath(path),
-      ManifestSpec.show(manifest),
-    );
+  | Link(link) => pretty ? Link.showPretty(link) : Link.show(link)
+  };
+};
 
-let show = show'(~showPath=DistPath.show);
-let showPretty = show'(~showPath=DistPath.showPretty);
+let show = show'(~pretty=false);
+let showPretty = show'(~pretty=true);
 
 let pp = (fmt, src) => Fmt.pf(fmt, "%s", show(src));
 
@@ -83,48 +62,17 @@ let ppPretty = (fmt, src) => Fmt.pf(fmt, "%s", showPretty(src));
 module Parse = {
   include Parse;
 
-  let withPrefix = (prefix, p) => string(prefix) *> p;
-
-  let pathLike = (~requirePathSep, make) => {
-    let make = path => {
-      let path = Path.(normalizeAndRemoveEmptySeg(v(path)));
-      let (path, manifest) =
-        switch (ManifestSpec.ofString(Path.basename(path))) {
-        | Ok(manifest) =>
-          let path = Path.(remEmptySeg(parent(path)));
-          (path, Some(manifest));
-        | Error(_) => (path, None)
-        };
-
-      make(DistPath.ofPath(path), manifest);
-    };
-
-    let path =
-      scan(false, (seenPathSep, c) => Some(seenPathSep || c == '/'));
-
-    let%bind (path, seenPathSep) = path;
-    if (!requirePathSep || seenPathSep) {
-      return(make(path));
-    } else {
-      fail("not a path");
-    };
-  };
-
-  let link = kind => {
-    let make = (path, manifest) => Link({path, manifest, kind});
-
-    pathLike(make);
-  };
-
   let dist = {
     let%map dist = Dist.parser;
     Dist(dist);
   };
 
-  let parser =
-    withPrefix("link:", link(LinkRegular, ~requirePathSep=false))
-    <|> withPrefix("link-dev:", link(LinkDev, ~requirePathSep=false))
-    <|> dist;
+  let link = {
+    let%map link = Link.parser;
+    Link(link);
+  };
+
+  let parser = link <|> dist;
 
   let parserRelaxed = {
     let distRelaxed = {

@@ -1,9 +1,5 @@
 type t =
-  | Link{
-      path: DistPath.t,
-      manifest: option(ManifestSpec.t),
-      kind: Source.linkKind,
-    }
+  | Link(Link.t)
   | Install{
       source: (Dist.t, list(Dist.t)),
       opam: option(opam),
