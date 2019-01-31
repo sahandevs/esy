@@ -25,7 +25,8 @@ type t =
 include S.PRINTABLE with type t := t;
 include S.COMPARABLE with type t := t;
 
-let to_yojson: t => [> | `String(string)];
+let to_yojson: t => Json.t;
+let of_yojson: Json.t => result(t, string);
 let ofSource: Source.t => t;
 
 let parser: Parse.t(t);

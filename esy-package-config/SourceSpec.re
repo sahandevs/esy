@@ -198,6 +198,12 @@ let parser = Parse.source;
 
 let parse = Parse.(parse(source));
 
+let of_yojson = json =>
+  switch (json) {
+  | `String(v) => parse(v)
+  | _ => Error("expected string")
+  };
+
 let%test_module "parsing" =
   (module
    {
