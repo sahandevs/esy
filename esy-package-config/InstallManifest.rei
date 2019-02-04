@@ -39,7 +39,7 @@ type t = {
   devDependencies: Dependencies.t,
   peerDependencies: NpmFormula.t,
   optDependencies: StringSet.t,
-  resolutions: Resolutions.t,
+  resolutions: ResolutionsManifest.t,
   kind,
 }
 and kind =

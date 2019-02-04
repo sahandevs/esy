@@ -39,7 +39,7 @@ type install = {
   [@default None]
   devDependencies: option(NpmFormula.Override.t),
   [@default None]
-  resolutions: option(StringMap.t(Resolution.resolution)),
+  resolutions: option(ResolutionsManifest.t),
 };
 
 let pp = fmt =>

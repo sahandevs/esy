@@ -92,7 +92,7 @@ let emptyLink = (~name, ~path, ~manifest, ~kind, ()) => {
   devDependencies: InstallManifest.Dependencies.NpmFormula([]),
   peerDependencies: NpmFormula.empty,
   optDependencies: StringSet.empty,
-  resolutions: Resolutions.empty,
+  resolutions: ResolutionsManifest.empty,
   kind: Esy,
 };
 
@@ -107,7 +107,7 @@ let emptyInstall = (~name, ~source, ()) => {
   devDependencies: InstallManifest.Dependencies.NpmFormula([]),
   peerDependencies: NpmFormula.empty,
   optDependencies: StringSet.empty,
-  resolutions: Resolutions.empty,
+  resolutions: ResolutionsManifest.empty,
   kind: Esy,
 };
 
@@ -446,13 +446,7 @@ let applyOverride = (pkg, override: Override.install) => {
 
   let pkg =
     switch (resolutions) {
-    | Some(resolutions) =>
-      let resolutions = {
-        let f = Resolutions.add;
-        StringMap.fold(f, resolutions, Resolutions.empty);
-      };
-
-      {...pkg, InstallManifest.resolutions};
+    | Some(resolutions) => {...pkg, InstallManifest.resolutions}
     | None => pkg
     };
 

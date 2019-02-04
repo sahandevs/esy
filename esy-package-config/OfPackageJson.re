@@ -40,7 +40,9 @@ module InstallManifestV1 = {
 
   module ResolutionsOfManifest = {
     [@deriving of_yojson({strict: false})]
-    type t = {resolutions: [@default Resolutions.empty] Resolutions.t};
+    type t = {
+      resolutions: [@default ResolutionsManifest.empty] ResolutionsManifest.t,
+    };
   };
 
   module DevDependenciesOfManifest = {
@@ -142,7 +144,7 @@ module InstallManifestV1 = {
 
     let%bind resolutions =
       switch (parseResolutions) {
-      | false => return(Resolutions.empty)
+      | false => return(ResolutionsManifest.empty)
       | true =>
         let%bind {ResolutionsOfManifest.resolutions} =
           Json.parseJsonWith(ResolutionsOfManifest.of_yojson, json);

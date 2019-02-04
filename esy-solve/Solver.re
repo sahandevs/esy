@@ -617,7 +617,7 @@ let solveDependencies = (~root, ~installed, ~strategy, dependencies, solver) => 
     devDependencies: Dependencies.NpmFormula([]),
     peerDependencies: NpmFormula.empty,
     optDependencies: StringSet.empty,
-    resolutions: Resolutions.empty,
+    resolutions: ResolutionsManifest.empty,
     kind: Esy,
   };
 

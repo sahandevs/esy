@@ -24,8 +24,7 @@ type build = {
 type install = {
   dependencies: option(NpmFormula.Override.t),
   devDependencies: option(NpmFormula.Override.t),
-  [@default None]
-  resolutions: option(StringMap.t(Resolution.resolution)),
+  resolutions: option(ResolutionsManifest.t),
 };
 
 let build: t => RunAsync.t(option(build));

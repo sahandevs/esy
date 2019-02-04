@@ -27,7 +27,8 @@ let ofResolution = (cfg, spec, resolver, resolution) => {
       {...root, name};
     };
 
-    return({cfg, spec, root, resolutions: root.resolutions, resolver});
+    let resolutions = failwith("TODO");
+    return({cfg, spec, root, resolutions, resolver});
   | Error(msg) => errorf("unable to construct sandbox: %s", msg)
   };
 };
@@ -107,7 +108,8 @@ let make = (~cfg, spec: EsyInstall.SandboxSpec.t) => {
           resolutions,
           kind: Npm,
         };
-        return({cfg, spec, root, resolutions: root.resolutions, resolver});
+        let resolutions = failwith("TODO");
+        return({cfg, spec, root, resolutions, resolver});
       };
     },
     "loading root package metadata",

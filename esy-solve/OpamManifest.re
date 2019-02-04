@@ -347,7 +347,7 @@ let toInstallManifest = (~source=?, ~name, ~version, manifest) => {
         devDependencies,
         optDependencies,
         peerDependencies: NpmFormula.empty,
-        resolutions: Resolutions.empty,
+        resolutions: ResolutionsManifest.empty,
       }),
     );
   };
