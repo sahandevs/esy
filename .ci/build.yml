@@ -5,40 +5,59 @@ steps:
   - script: 'esy install'
     displayName: 'esy install'
 
-  - script: 'esy build'
-    displayName: 'esy build'
-
-  - script: 'esy dune build @fmt'
-    displayName: 'Check code formatting'
-
-  - script: 'esy bootstrap'
-    displayName: 'esy bootstrap'
-
-  - script: 'esy b dune runtest test'
-    displayName: 'esy b dune runtest test'
-
+  - script: 'esy node --version'
+    continueOnError: true
+  - script: 'esy node.exe --version'
+    continueOnError: true
+  - script: 'esy which node'
+    continueOnError: true
+  - script: 'esy which node.exe'
+    continueOnError: true
+  - script: 'esy where node'
+    continueOnError: true
+  - script: 'esy where node.exe'
+    continueOnError: true
+  - script: 'esy node -p "1"'
+    continueOnError: true
+  - script: 'esy jest test-e2e'
+    continueOnError: true
   - script: 'esy test:e2e'
     continueOnError: true
-    displayName: 'esy test:e2e'
 
-  - script: 'node -r ./_esy/default/pnp.js ./test-e2e-slow/run-slow-tests.js'
-    continueOnError: true
-    displayName: 'esy test:e2e-slow'
+  # - script: 'esy build'
+  #   displayName: 'esy build'
 
-  - task: PublishTestResults@2
-    displayName: 'Publish Test Results'
-    condition: succeededOrFailed()
-    inputs:
-      testResultsFiles: '**junit*.xml'
-      testRunTitle: TestRun ${{ parameters.name }} $(node_version)
+  # - script: 'esy dune build @fmt'
+  #   displayName: 'Check code formatting'
 
-  - task: PublishCodeCoverageResults@1
-    displayName: 'Publish code coverage results'
-    condition: succeededOrFailed()
-    inputs:
-      codeCoverageTool: 'cobertura'
-      summaryFileLocation: '**/coverage/cobertura-coverage.xml'
+  # - script: 'esy bootstrap'
+  #   displayName: 'esy bootstrap'
 
-  - script: 'esy release:platform-release'
-    condition: succeededOrFailed()
-    displayName: 'esy platform-release'
+  # - script: 'esy b dune runtest test'
+  #   displayName: 'esy b dune runtest test'
+
+  # - script: 'esy test:e2e'
+  #   continueOnError: true
+  #   displayName: 'esy test:e2e'
+
+  # - script: 'node -r ./_esy/default/pnp.js ./test-e2e-slow/run-slow-tests.js'
+  #   continueOnError: true
+  #   displayName: 'esy test:e2e-slow'
+
+  # - task: PublishTestResults@2
+  #   displayName: 'Publish Test Results'
+  #   condition: succeededOrFailed()
+  #   inputs:
+  #     testResultsFiles: '**junit*.xml'
+  #     testRunTitle: TestRun ${{ parameters.name }} $(node_version)
+
+  # - task: PublishCodeCoverageResults@1
+  #   displayName: 'Publish code coverage results'
+  #   condition: succeededOrFailed()
+  #   inputs:
+  #     codeCoverageTool: 'cobertura'
+  #     summaryFileLocation: '**/coverage/cobertura-coverage.xml'
+
+  # - script: 'esy release:platform-release'
+  #   condition: succeededOrFailed()
+  #   displayName: 'esy platform-release'
