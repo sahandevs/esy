@@ -19,6 +19,8 @@ steps:
     continueOnError: true
   - script: 'esy exec-command --include-current-env --include-npm-bin -- jest test-e2e'
     continueOnError: true
+  - script: 'echo %PathExt%'
+    continueOnError: true
   # - script: 'esy test:e2e'
   #   continueOnError: true
 
