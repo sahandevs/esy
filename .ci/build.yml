@@ -15,10 +15,12 @@ steps:
     continueOnError: true
   - script: 'esy exec-command --include-current-env --include-npm-bin -- node -p "1"'
     continueOnError: true
+  - script: 'esy exec-command --include-current-env -- cat _esy/default/bin/jest.cmd'
+    continueOnError: true
   - script: 'esy exec-command --include-current-env --include-npm-bin -- jest test-e2e'
     continueOnError: true
-  - script: 'esy test:e2e'
-    continueOnError: true
+  # - script: 'esy test:e2e'
+  #   continueOnError: true
 
   # - script: 'esy build'
   #   displayName: 'esy build'
