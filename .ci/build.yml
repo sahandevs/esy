@@ -9,6 +9,8 @@ steps:
     continueOnError: true
   - script: 'esy exec-command --include-current-env --include-npm-bin -- where node'
     continueOnError: true
+  - script: 'esy exec-command --include-current-env --include-npm-bin -- where node.cmd'
+    continueOnError: true
   - script: 'esy exec-command --include-current-env --include-npm-bin -- node --version'
     continueOnError: true
   - script: 'esy exec-command --include-current-env --include-npm-bin -- node.exe --version'
@@ -20,6 +22,16 @@ steps:
   - script: 'esy exec-command --include-current-env --include-npm-bin -- jest test-e2e'
     continueOnError: true
   - script: 'echo %PathExt%'
+    continueOnError: true
+  - script: 'echo %Path%'
+    continueOnError: true
+  - script: 'esy exec-command --include-current-env --include-npm-bin -- echo !PathExt!'
+    continueOnError: true
+  - script: 'esy exec-command --include-current-env --include-npm-bin -- cat _esy/default/bin/node.cmd'
+    continueOnError: true
+  - script: 'esy exec-command --include-current-env --include-npm-bin -- ./_esy/default/bin/node.cmd --version'
+    continueOnError: true
+  - script: 'esy exec-command --include-current-env --include-npm-bin -- ./_esy/default/bin/node.cmd -p "1"'
     continueOnError: true
   # - script: 'esy test:e2e'
   #   continueOnError: true
