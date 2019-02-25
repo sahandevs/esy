@@ -5,21 +5,21 @@ steps:
   - script: 'esy install'
     displayName: 'esy install'
 
-  - script: 'esy node --version'
+  - script: 'esy exec-command --include-current-env -- node --version'
     continueOnError: true
-  - script: 'esy node.exe --version'
+  - script: 'esy exec-command --include-current-env -- node.exe --version'
     continueOnError: true
-  - script: 'esy which node'
+  - script: 'esy exec-command --include-current-env -- which node'
     continueOnError: true
-  - script: 'esy which node.exe'
+  - script: 'esy exec-command --include-current-env -- which node.exe'
     continueOnError: true
-  - script: 'esy where node'
+  - script: 'esy exec-command --include-current-env -- where node'
     continueOnError: true
-  - script: 'esy where node.exe'
+  - script: 'esy exec-command --include-current-env -- where node.exe'
     continueOnError: true
-  - script: 'esy node -p "1"'
+  - script: 'esy exec-command --include-current-env -- node -p "1"'
     continueOnError: true
-  - script: 'esy jest test-e2e'
+  - script: 'esy exec-command --include-current-env -- jest test-e2e'
     continueOnError: true
   - script: 'esy test:e2e'
     continueOnError: true
